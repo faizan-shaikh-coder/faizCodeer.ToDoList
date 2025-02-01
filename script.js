@@ -1,92 +1,106 @@
-const user = document.getElementById("user-inpt");
-const button = document.getElementById("btn");
-const order = document.getElementById("Todo");
-const alrt = document.getElementById("alrt");
+document.addEventListener('DOMContentLoaded',()=>{
+
+const userInput = document.getElementById("user-inpt");
+const addButton = document.getElementById("btn");
+const todoList = document.getElementById("Todo");
+const nowDate = document.getElementById("date");
 
 
-const newBox = document.createElement("span");
+//Create localStorage function//
+function saveToLocalStorage(){
+    const Todos = [];
+    document.querySelectorAll("#Todo li").forEach((li)=>{
+     Todos.push(li.querySelector(".todo-text").textContent);
+    });
+    localStorage.setItem("todos", JSON.stringify(Todos));
+};
 
-
-document.getElementById("btn").addEventListener('click', ()=>{
-
-    const inputText = user.value.trim();
-
-    if(inputText.length === 0)
-    {
-     document.getElementById("alrt").innerText = "You Must Write Something!..";
-     document.getElementById("alrt").style.color = "tomato";
-     document.getElementById("alrt").style.fontSize = "1.3rem";
-       
-       setTimeout(()=>{
-        document.getElementById("alrt").innerText = "";
-       },2000)
-       return
-    }
-
-  const newList = document.createElement("li");
-
-
-   newList.textContent = inputText;
-   order.appendChild(newList);
-   document.getElementById("user-inpt").value = "";
-
-
-   const updateList = document.createElement("button");
-    updateList.innerHTML = '<i class="ri-pencil-fill"></i>';
-    updateList.style.border = "none";
-    updateList.style.background = "none";
-
-updateList.addEventListener('click', ()=>{
  
-  const newText = prompt("Edit Your ToDo Here:-", newList.textContent);
+//Create a function for the add todo in list//
+function createTodoItem(text){
 
-  if(newText !== null && newText.trim() !== "")
+    const newListItem = document.createElement("li");
+    const textSpan = document.createElement("span");
+     
+    textSpan.textContent = text;
+    textSpan.classList.add("todo-text");
+    textSpan.style.display ="1";
 
+    //Create another span for the Add the dlete or edit button//
+    const butttonSpan = document.createElement("span");
+
+//Create edit button //
+const updateButton = document.createElement("button");
+updateButton.innerHTML = `<i class= "ri-pencil-fill"></i>`;
+updateButton.style.border = "none";
+updateButton.style.background = "none";
+
+//now addEventListner on updateButtton//
+updateButton.addEventListener('click', ()=>{
+
+    const newText = prompt("Edit Your Task:", textSpan.textContent);
+    if(newText !== null && newText.trim() !== ""){
+        
+        textSpan.textContent = newText.trim();
+        saveToLocalStorage();
+    }
+});
+
+
+//Create delete button//
+const clearButton = document.createElement("button");
+clearButton.innerHTML = `<i class="ri-delete-bin-2-fill"></i>`;
+clearButton.style.background = "none";
+clearButton.style.border = "none";
+
+//addEventListner on clearButton//
+clearButton.addEventListener('click',()=>{
+todoList.removeChild(newListItem);
+saveToLocalStorage();
+});
+
+   //now add the buttons in buttonSpan//
+   butttonSpan.appendChild(updateButton);
+   butttonSpan.appendChild(clearButton);
+
+    newListItem.appendChild(textSpan);
+    newListItem.appendChild(butttonSpan);
+    todoList.appendChild(newListItem);
+    saveToLocalStorage();
+}
+
+
+//Create function Load Todos//
+
+function loadFromLocalStorage(){
+    const todos = JSON.parse(localStorage.getItem("todos")) || [];
+    todos.forEach((todoText)=>{
+        createTodoItem(todoText);
+    });
+}
+
+
+//addEventListner On the button//
+addButton.addEventListener('click', ()=>{
+ const newInpt = userInput.value.trim();
+   if(newInpt.length === 0)
     {
-      newList.firstChild.textContent = newText.trim();
-      newList.appendChild(updateList);
-      newList.appendChild(updateList)
+        alert("You Must Write Smoething in Input field");
+        return false;
     }
 
+    //call function for adding a input text in listitem//
+   createTodoItem(newInpt);
+    userInput.value =""; 
 });
 
+loadFromLocalStorage();
 
-newList.appendChild(updateList)
-    newBox.appendChild(updateList);
-    newList.appendChild(newBox);
-    order.appendChild(newList);
-
-
-    const deleteList = document.createElement("button");
-    deleteList.innerHTML = '<i class="ri-delete-bin-2-fill"></i>';
-    deleteList.style.border = "none";
-
-
-    deleteList.addEventListener('click',  ()=>{
-      order.removeChild(newList);
-    })
-
-    newList.appendChild(deleteList);
-
-
-});
-
-
-const dateDisplay = document.getElementById("date");
-
-function getCurrentDate() {
-    const today = new Date();
-    const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const year = today.getFullYear();
-    return `${day}/${month}/${year}`;
+function displayDate() {
+    const toady = new Date();
+    const dataString = toady.toDateString();
+    nowDate.textContent = dataString;
 }
-dateDisplay.innerText = `Date: ${getCurrentDate()}`;
-dateDisplay.style.color = "azure";
+displayDate();
 
-
-
-
-
-
-
+});

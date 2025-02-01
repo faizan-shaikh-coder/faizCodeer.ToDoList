@@ -3,42 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
-    rel="stylesheet"
-/>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css">
     <title>To-Do List</title>
 </head>
-
-
 <body>
-   
-    <div class="container">
 
+    <div class="container">
         <div class="head">
-            <h1>My To-Do List</h1>
+            <h1>To-Do List</h1>
         </div>
 
-        <div class="inpt">
-            <input type="text" placeholder="Enter Your To-Do.." id="user-inpt">
-            <input type="button" value="Add" id="btn">
-           
+        <div class="input-container">
+            <input type="text" placeholder="Enter your task..." id="user-inpt">
+            <button id="btn">Add Task</button>
         </div>
 
         <div class="content">
-            <h2>Today</h2>
+            <h2>Today's Tasks</h2>
             <p id="date"></p>
-
-            <ul id="Todo">
-               
-            </ul>
-           
+            <ul id="Todo"></ul>
         </div>
         <p id="alrt"></p>
-
     </div>
-  
+
     <script src="script.js"></script>
 </body>
 </html>
